@@ -367,7 +367,7 @@ int main(){
                 std::cin >> idAng;
                 std::cout << "Salariu persoana: ";
                 std::cin >> salariuAng;
-                std::cout << "Departament: ";
+                std::cout << "Departament (SD - HR - LG - DG): ";
                 std::cin >> dep;
                 Angajat a(numeAng, idAng, salariuAng);
                 Departament& d1 = verificareDepartament(dep, gasit);
@@ -380,7 +380,7 @@ int main(){
 
             case 2: {
                 //stergerea de angajat dintr-un departament
-                std::cout << "Alege departament: ";
+                std::cout << "Alege departament (SD - HR - LG - DG): ";
                 std::cin >> dep;
                 std::cout << "Introdu id-ul angajatului: ";
                 std::cin >> idAng;
@@ -394,7 +394,7 @@ int main(){
 
             case 3: {
                 //afisarea unui departament
-                std::cout << "Alege departament: ";
+                std::cout << "Alege departament (SD - HR - LG - DG): ";
                 std::cin >> dep;
                 Departament& d3 = verificareDepartament(dep, gasit);
                 if (gasit) {
@@ -405,7 +405,7 @@ int main(){
 
             case 4: {
                 //marirea unui salariu cu un procent
-                std::cout << "Alege departament: ";
+                std::cout << "Alege departament (SD - HR - LG - DG): ";
                 std::cin >> dep;
                 std::cout << "Introdu id-ul angajatului: ";
                 std::cin >> idAng;
@@ -420,7 +420,7 @@ int main(){
             }
             case 5: {
                 //scaderea unui salariu cu un procent
-                std::cout << "Alege departament: ";
+                std::cout << "Alege departament(SD - HR - LG - DG): ";
                 std::cin >> dep;
                 std::cout << "Introdu id-ul angajatului: ";
                 std::cin >> idAng;
@@ -443,7 +443,7 @@ int main(){
                 std::cin.getline(numeProiect, 100);
                 std::cout << "Buget proiect: ";
                 std::cin >> buget;
-                std::cout << "Alege departament: ";
+                std::cout << "Alege departament (SD - HR - LG - DG): ";
                 std::cin >> dep;
                 Departament& d6 = verificareDepartament(dep, gasit);
                 if (gasit) {
