@@ -305,6 +305,25 @@ void adaugaDinFisier(const Angajat& a) {
 
 int main(){
 
+
+    //afisare provizorie pentru prezentare
+    Angajat a1("Angajat 1", 1, 4000);
+    Angajat a2("Angajat 2", 2, 5000);
+    Angajat a3("Angajat 3", 3, 2500);
+    Angajat a4("Angjat 4", 4, 2000);
+    std::cout << a1 << "\n" << a2 << "\n" << a3 << "\n" << a4 << "\n\n";
+    SD.adaugaAngajat(a1);
+    SD.adaugaAngajat(a2);
+    HR.adaugaAngajat(a3);
+    HR.adaugaAngajat(a4);
+    std::cout << SD << "\n" << HR << "\n";
+    Proiect p1("Aplicatie Mobila", 7000);
+    Proiect p2("Recrutari", 8000);
+    std::cout << p1 << "\n" << p2 << "\n";
+    SD.viabiliateProiect(p1);
+    HR.viabiliateProiect(p2);
+
+
     char nume_fisier[100];
     std::cout << "Nume fisier cu viitorii angajati: ";
     std::cin >> nume_fisier;
