@@ -14,7 +14,7 @@ public:
     //constructori/destructori
     Proiect (const char* nume, double buget);
     Proiect (const Proiect& altul);
-    Proiect& operator=(const Proiect& altul);
+    Proiect& operator=(const Proiect& altul); 
     ~Proiect();
 
     double getBuget() const;

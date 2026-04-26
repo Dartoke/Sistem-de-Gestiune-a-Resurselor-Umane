@@ -5,6 +5,9 @@
 #include "angajati.h"
 #include "proiect.h"
 #include "departament.h"
+#include "angajatFullTime.h"
+#include "angajatPartTime.h"
+#include "contractor.h"
 
 //functie care verifica daca un departament exista
 Departament& verificareDepartament (const char* dep, std::vector<Departament>& departamente, bool& gasit){
@@ -53,23 +56,40 @@ int main(){
     std::cin >> nume_fisier;
     std::ifstream fin(nume_fisier);
 
-    char numeAng[100], dep[100];
-    int idAng;
-    double salariuAng;
+    char numeAng[100], dep[100], tipContract[100];
+    int idAng, zileConcediu, aniVechime, orePerSaptamana, zileLucrate;
+    double salariuAng, salariuPerOra, salariuZilnic;
     char separator;
+    std::string dateExpirareContract;
 
     //adaugarea din fisier, se apeleaza functia de mai sus
-    while (fin.getline(numeAng, sizeof(numeAng), '%')) {
+    while (fin.getline(tipContract, sizeof(tipContract), '%')) {
 
-        char* start = numeAng;
+        char* start = tipContract;
         while(*start == ' ' || *start == '\n' || *start == '\r') {
             start++;
         }
         if (strlen(start) > 0 && start[strlen(start) - 1] == ' ') {
             start[strlen(start) - 1] = '\0';
         }
-        if (fin >> idAng >> separator >> salariuAng) {
-            Angajat a(start, idAng, salariuAng);
+        if (strcmp(start, "Full Time") == 0) {
+            fin.getline(numeAng, sizeof(numeAng), '%');
+            fin >> idAng >> separator >> salariuAng >> separator >> zileConcediu >> separator >> aniVechime;
+            AngajatFullTime a(numeAng, idAng, salariuAng, zileConcediu, aniVechime);
+            adaugaDinFisier(a, departamente);
+            fin.ignore(1000, '\n');
+        }
+        else if (strcmp(start, "Part Time") == 0) {
+            fin.getline(numeAng, sizeof(numeAng), '%');
+            fin >> idAng >> separator >> orePerSaptamana >> separator >> salariuPerOra;
+            AngajatPartTime a(numeAng, idAng, orePerSaptamana, salariuPerOra);
+            adaugaDinFisier(a, departamente);
+            fin.ignore(1000, '\n');
+        }
+        else if (strcmp(start, "Contractor") == 0) {
+            fin.getline(numeAng, sizeof(numeAng), '%');
+            fin >> idAng >> separator >> salariuZilnic >> separator >> zileLucrate >> separator >> dateExpirareContract;
+            Contractor a(numeAng, idAng, salariuZilnic, zileLucrate, dateExpirareContract);
             adaugaDinFisier(a, departamente);
             fin.ignore(1000, '\n');
         }
@@ -81,6 +101,7 @@ int main(){
     std::cout << "\nBine ai venit, e timpul sa gestionezi firma la care lucrezi.\n\n";
 
     int optiune;
+    int optiuneAngajat;
     double procent;
     bool gasit;
 
@@ -103,21 +124,59 @@ int main(){
                 break;
             case 1: {
                 //adaugarea de angajat la un departament
+                Angajat* a = nullptr;
                 std::cout << "Nume persoana: ";
                 std::cin.ignore();
                 std::cin.getline(numeAng, 100);
                 std::cout << "Id persoana: ";
                 std::cin >> idAng;
-                std::cout << "Salariu persoana: ";
-                std::cin >> salariuAng;
-                std::cout << "Departament (SD - HR - LG - DG): ";
-                std::cin >> dep;
-                Angajat a(numeAng, idAng, salariuAng);
-                Departament& d1 = verificareDepartament(dep, departamente, gasit);
-                if (gasit) {
-                    d1.adaugaAngajat(a);
+                std::cout <<"Tip angajat\n1 - Full Time\n2 - Part Time\n3 - Contractor\n";
+                std::cout << "\nAlege optiune (numarul): ";
+                std::cin >> optiuneAngajat;
+                switch (optiuneAngajat) {
+                    case 1: {
+                        std::cout << "Salariu: ";
+                        std::cin >> salariuAng;
+                        std::cout << "Zile concediu: ";
+                        std::cin >> zileConcediu;
+                        std::cout << "Ani Vechime: ";
+                        std::cin >> aniVechime;
+                        a = new AngajatFullTime(numeAng, idAng, salariuAng, zileConcediu, aniVechime);
+                        break;
+                    }
+                    case 2: {
+                        std::cout << "Ore pe Saptamana: ";
+                        std::cin >> orePerSaptamana;
+                        std::cout << "Salariu pe ora: ";
+                        std::cin >> salariuPerOra;
+                        a = new AngajatPartTime(numeAng, idAng, orePerSaptamana, salariuPerOra);
+                        break;
+                    }
+                    case 3: {
+                        std::cout << "Salariu zilnic: ";
+                        std::cin >> salariuZilnic;
+                        std::cout << "Zile lucrate: ";
+                        std::cin >> zileLucrate;
+                        std::cout << "Data expirare contract (format: DD-MM-YYYY): ";
+                        std::cin >> dateExpirareContract;
+                        a = new Contractor(numeAng, idAng, salariuZilnic, zileLucrate, dateExpirareContract);
+                        break;
+                    }
+                    default:
+                        std::cout << "Optiune invalida pentru tip angajat\n";
+                        continue;
                 }
-                std::cout << "\n~" << numeAng <<"~ a fost angajat cu succes!\n\n";
+                if (a != nullptr) {
+                    std::cout << "Departament (SD - HR - LG - DG): ";
+                    std::cin >> dep;
+                    
+                    Departament& d1 = verificareDepartament(dep, departamente, gasit);
+                    if (gasit) {
+                        d1.adaugaAngajat(*a);
+                        std::cout << "\n~" << numeAng <<"~ a fost angajat cu succes!\n\n";
+                    }
+                delete a;
+                }
                 break;
             }
 

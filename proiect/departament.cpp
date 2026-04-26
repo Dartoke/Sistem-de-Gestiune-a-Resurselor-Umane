@@ -12,21 +12,32 @@ Departament::Departament(const char* numeDep) {
 }
 
 Departament::Departament (const Departament& altul) 
-: echipa(altul.echipa) {
-    numeDepartament = copiazaSir(altul.numeDepartament);
+: numeDepartament(copiazaSir(altul.numeDepartament)) {
+    for (auto* a : altul.echipa) {
+        echipa.push_back(a -> clone());
+    }
 }
 
 Departament& Departament::operator=(const Departament& altul) {
     if (this != &altul) {
         delete[] numeDepartament;
         numeDepartament = copiazaSir(altul.numeDepartament);
-        echipa = altul.echipa;
+        for (auto* a : echipa) {
+            delete a;
+        }
+        echipa.clear();
+        for (auto* a : altul.echipa) {
+            echipa.push_back(a -> clone());
+        }
     }
     return *this;
 }
 
 Departament::~Departament() {
     delete[] numeDepartament;
+    for (auto* a: echipa) {
+        delete a;
+    }
 }
 
 std::string Departament::getNume() const { 
@@ -35,15 +46,16 @@ std::string Departament::getNume() const {
 
 //functie de adaugare angajat in departament
 void Departament::adaugaAngajat (const Angajat& a) {
-    echipa.push_back(a);
+    echipa.push_back(a.clone());
 }
 
 //functie de stergere angajat din departament
 void Departament::stergeAngajat(int id) {
     bool gasit = false;
     for (auto i = echipa.begin(); i != echipa.end(); ++i) {
-        if (i -> getId() == id) {
-            std::cout <<"\n~" << i -> getNume() << "~ a fost concediat cu succes!\n";
+        if ((*i) -> getId() == id) {
+            std::cout <<"\n~" << (*i) -> getNume() << "~ a fost concediat cu succes!\n";
+            delete *i;
             echipa.erase(i);
             gasit = true;
             break;
@@ -57,8 +69,8 @@ void Departament::stergeAngajat(int id) {
 //afisare departament
 std::ostream& operator<<(std::ostream& os, const Departament& dep) {
     os << dep.numeDepartament << ":\n";
-    for (const auto& ang : dep.echipa) {
-        os << ang << "\n";
+    for (const auto* ang : dep.echipa) {
+        os << *ang << "\n";
     }
     return os;
 }
@@ -66,8 +78,8 @@ std::ostream& operator<<(std::ostream& os, const Departament& dep) {
 //functie de calcul a costului unui proiect
 double Departament::costProiectEchipa() const {
     double total = 0;
-    for (const auto& ang : echipa){
-        total += ang.getSalariu();
+    for (const auto* ang : echipa){
+        total += ang -> calculeazaSalariu();
     }
     return taxeLogistica(total);
 }
@@ -87,8 +99,8 @@ void Departament::viabiliateProiect (const Proiect& p) const{
 void Departament::maresteSalariuId(double procent, int id){
     bool gasit = false;
     for (auto i = echipa.begin(); i != echipa.end(); ++i) {
-        if (i -> getId() == id) {
-            i -> maresteSalariu(procent);
+        if ((*i) -> getId() == id) {
+            (*i) -> maresteSalariu(procent);
             gasit = true;
             break; 
         }
@@ -102,8 +114,8 @@ void Departament::maresteSalariuId(double procent, int id){
 void Departament::scadereSalariuId(double procent, int id){
     bool gasit = false;
     for (auto i = echipa.begin(); i != echipa.end(); ++i) {
-        if (i -> getId() == id) {
-            i -> scadeSalariu(procent); 
+        if ((*i) -> getId() == id) {
+            (*i) -> scadeSalariu(procent); 
             gasit = true;
             break; 
         }

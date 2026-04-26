@@ -9,7 +9,7 @@ Proiect::Proiect (const char* nume, double buget)
     numeProiect = copiazaSir(nume);
 }
 
-Proiect::Proiect (const Proiect& altul) 
+Proiect::Proiect (const Proiect& altul)
 : bugetAlocat(altul.bugetAlocat) {
     numeProiect = copiazaSir(altul.numeProiect);
 }

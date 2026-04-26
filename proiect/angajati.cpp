@@ -1,16 +1,15 @@
 #include "angajati.h"
 #include <iostream>
-#include <cstring>
 
 
 //constructori/destructori
-Angajat::Angajat (const char* numeAng, int idAng, double salariuAng) 
-: id(idAng), salariu(salariuAng) { 
+Angajat::Angajat (const char* numeAng, int idAng) 
+: id(idAng) { 
     nume = copiazaSir(numeAng); 
 }
 
 Angajat::Angajat(const Angajat& altul) 
-: id(altul.id), salariu(altul.salariu) {
+: id(altul.id) {
     nume = copiazaSir(altul.nume);
 }
 
@@ -19,7 +18,6 @@ Angajat& Angajat::operator=(const Angajat& altul) {
         delete[] nume;
         nume = copiazaSir(altul.nume);
         id = altul.id;
-        salariu = altul.salariu;
     }
     return *this;
 }
@@ -36,24 +34,8 @@ int Angajat::getId() const {
     return id;              //getteri
 } 
 
-double Angajat::getSalariu() const { 
-    return salariu; 
-}
-
 // afisare angajat
 std::ostream& operator<<(std::ostream& os, const Angajat& a){
-    os << a.nume << " (#" << a.id << ") | Salariu: " << a.salariu;
+    a.print(os);
     return os;
-}
-
-//functie de marire a salariului
-void Angajat::maresteSalariu(double procent) {
-    salariu += (salariu * procent) / 100.0;
-    std::cout << "\nSalariu nou: " << salariu << "\n";
-}
-
-// functie de scadere a salariului
-void Angajat::scadeSalariu(double procent) {
-    salariu -= (salariu * procent) / 100.0;
-    std::cout << "\nSalariu nou: " << salariu << "\n";
 }
