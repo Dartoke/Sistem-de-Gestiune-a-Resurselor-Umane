@@ -5,6 +5,8 @@ class AngajatPartTime : public Angajat {
     private: 
         int orePerSaptamana;
         double salariuPerOra;
+        static const double salariuMinimOra;
+
         void print(std::ostream& os) const override;
 
     public:

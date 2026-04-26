@@ -1,8 +1,15 @@
 #include "angajatFullTime.h"
 #include <iostream>
+#include "exceptii.h"
+
+const double AngajatFullTime::salariuMinim = 4300.0;
 
 AngajatFullTime::AngajatFullTime(const char* nume, int id, double salariuAFT, int zileConcediuAFT, int aniVechimeAFT) 
-: Angajat(nume, id), salariu(salariuAFT), zileConcediu(zileConcediuAFT), aniVechime(aniVechimeAFT) {}
+: Angajat(nume, id), salariu(salariuAFT), zileConcediu(zileConcediuAFT), aniVechime(aniVechimeAFT) {
+    if (salariuAFT < salariuMinim) {
+        throw ExceptieSalariuInvalid(salariuAFT);
+    }
+}
 
 AngajatFullTime::AngajatFullTime(const AngajatFullTime& altul) 
 : Angajat(altul.nume, altul.id), salariu(altul.salariu), zileConcediu(altul.zileConcediu), aniVechime(altul.aniVechime) {}

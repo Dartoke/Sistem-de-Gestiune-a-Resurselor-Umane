@@ -1,8 +1,15 @@
 #include "contractor.h"
 #include <iostream>
+#include "exceptii.h"
+
+const double salariuMinimZi = 175;
 
 Contractor::Contractor(const char* nume, int id, double salariuZilnicCTR, int zileLucrateCTR, const std::string& expirare)
-: Angajat(nume, id), salariuZilnic(salariuZilnicCTR), zileLucrate(zileLucrateCTR), dataExpirareContract(expirare) {}
+: Angajat(nume, id), salariuZilnic(salariuZilnicCTR), zileLucrate(zileLucrateCTR), dataExpirareContract(expirare) {
+    if (salariuZilnicCTR < salariuMinimZi) {
+        throw ExceptieSalariuInvalid(salariuZilnicCTR);
+    }
+}
 
 Contractor::Contractor(const Contractor& altul)
 : Angajat(altul.nume, altul.id), salariuZilnic(altul.salariuZilnic), zileLucrate(altul.zileLucrate), dataExpirareContract(altul.dataExpirareContract) {}

@@ -7,6 +7,8 @@ class Contractor : public Angajat {
         double salariuZilnic;
         int zileLucrate; 
         std::string dataExpirareContract;
+        static const double salariuMinimZi;
+
         void print(std::ostream& os) const override;
 
     public:    

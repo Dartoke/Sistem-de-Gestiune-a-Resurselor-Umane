@@ -1,9 +1,15 @@
 #include "angajatPartTime.h"
 #include <iostream>
+#include "exceptii.h"
 
+const double AngajatPartTime::salariuMinimOra = 20;
 
 AngajatPartTime::AngajatPartTime(const char* nume, int id, int oreAPT, double salariuAPT)
-: Angajat(nume, id), orePerSaptamana(oreAPT), salariuPerOra(salariuAPT) {}
+: Angajat(nume, id), orePerSaptamana(oreAPT), salariuPerOra(salariuAPT) {
+    if (salariuAPT < salariuMinimOra) {
+        throw ExceptieSalariuInvalid(salariuAPT);
+    }
+}
 
 AngajatPartTime::AngajatPartTime (const AngajatPartTime& altul)
 : Angajat(altul.nume, altul.id), orePerSaptamana(altul.orePerSaptamana), salariuPerOra(altul.salariuPerOra) {}

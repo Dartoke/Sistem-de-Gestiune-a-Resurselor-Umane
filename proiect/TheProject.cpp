@@ -8,6 +8,7 @@
 #include "angajatFullTime.h"
 #include "angajatPartTime.h"
 #include "contractor.h"
+#include "exceptii.h"
 
 //functie care verifica daca un departament exista
 Departament& verificareDepartament (const char* dep, std::vector<Departament>& departamente, bool& gasit){
@@ -182,15 +183,19 @@ int main(){
 
             case 2: {
                 //stergerea de angajat dintr-un departament
-                std::cout << "Alege departament (SD - HR - LG - DG): ";
-                std::cin >> dep;
-                std::cout << "Introdu id-ul angajatului: ";
-                std::cin >> idAng;
-                Departament& d2 = verificareDepartament(dep, departamente, gasit);
-                if (gasit) {
-                    d2.stergeAngajat(idAng);
+                try {
+                    std::cout << "Alege departament (SD - HR - LG - DG): ";
+                    std::cin >> dep;
+                    std::cout << "Introdu id-ul angajatului: ";
+                    std::cin >> idAng;
+                    Departament& d2 = verificareDepartament(dep, departamente, gasit);
+                    if (gasit) {
+                        d2.stergeAngajat(idAng);
+                    }
+                    std::cout << "\n";
+                } catch (const ExceptieAngajatNegasit& e) {
+                    std::cout << e.what() << "\n";
                 }
-                std::cout << "\n";
                 break;
             }
 
@@ -207,32 +212,40 @@ int main(){
 
             case 4: {
                 //marirea unui salariu cu un procent
-                std::cout << "Alege departament (SD - HR - LG - DG): ";
-                std::cin >> dep;
-                std::cout << "Introdu id-ul angajatului: ";
-                std::cin >> idAng;
-                std::cout << "Procent marire: ";
-                std::cin >> procent;
-                Departament& d4 = verificareDepartament(dep, departamente, gasit);
-                if (gasit) {
-                    d4.maresteSalariuId(procent, idAng);
+                try { 
+                    std::cout << "Alege departament (SD - HR - LG - DG): ";
+                    std::cin >> dep;
+                    std::cout << "Introdu id-ul angajatului: ";
+                    std::cin >> idAng;
+                    std::cout << "Procent marire: ";
+                    std::cin >> procent;
+                    Departament& d4 = verificareDepartament(dep, departamente, gasit);
+                    if (gasit) {
+                        d4.maresteSalariuId(procent, idAng);
+                    }
+                    std::cout << "\n";
+                } catch (const ExceptieAngajatNegasit& e) {
+                    std::cout << e.what() << "\n";
                 }
-                std::cout << "\n";
                 break;
             }
             case 5: {
                 //scaderea unui salariu cu un procent
-                std::cout << "Alege departament(SD - HR - LG - DG): ";
-                std::cin >> dep;
-                std::cout << "Introdu id-ul angajatului: ";
-                std::cin >> idAng;
-                std::cout << "Procent scadere: ";
-                std::cin >> procent;
-                Departament& d5 = verificareDepartament(dep, departamente, gasit);
-                if (gasit) {
-                    d5.scadereSalariuId(procent, idAng);
+                try {
+                    std::cout << "Alege departament(SD - HR - LG - DG): ";
+                    std::cin >> dep;
+                    std::cout << "Introdu id-ul angajatului: ";
+                    std::cin >> idAng;
+                    std::cout << "Procent scadere: ";
+                    std::cin >> procent;
+                    Departament& d5 = verificareDepartament(dep, departamente, gasit);
+                    if (gasit) {
+                        d5.scadereSalariuId(procent, idAng);
+                    }
+                    std::cout << "\n";
+                } catch (const ExceptieAngajatNegasit& e) {
+                    std::cout << e.what() << "\n";
                 }
-                std::cout << "\n";
                 break;
             }
             
@@ -240,19 +253,22 @@ int main(){
                 //verificarea viabilitatii unui proiect, proiect introdus de user de la tastatura
                 char numeProiect[100];
                 double buget;
-                std::cout << "Nume proiect: ";
-                std::cin.ignore();
-                std::cin.getline(numeProiect, 100);
-                std::cout << "Buget proiect: ";
-                std::cin >> buget;
-                std::cout << "Alege departament (SD - HR - LG - DG): ";
-                std::cin >> dep;
-                Departament& d6 = verificareDepartament(dep, departamente, gasit);
-                if (gasit) {
-                    Proiect p(numeProiect, buget);
-                    d6.viabiliateProiect(p);
-                }
-                std::cout << "\n";
+                try {
+                    std::cout << "Nume proiect: ";
+                    std::cin.ignore();
+                    std::cin.getline(numeProiect, 100);
+                    std::cout << "Buget proiect: ";
+                    std::cin >> buget;
+                    std::cout << "Alege departament (SD - HR - LG - DG): ";
+                    std::cin >> dep;
+                    Departament& d6 = verificareDepartament(dep, departamente, gasit);
+                    if (gasit) {
+                        Proiect p(numeProiect, buget);
+                        d6.viabiliateProiect(p);
+                    }
+                    std::cout << "\n";
+                } catch (const ExceptieProiectNeviabil& e){
+                    std::cout << e.what() << '\n';                }
                 break;
             }
 

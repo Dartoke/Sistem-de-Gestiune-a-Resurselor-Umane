@@ -7,6 +7,7 @@ class AngajatFullTime : public Angajat {
         double salariu;
         int zileConcediu;
         int aniVechime;
+        static const double salariuMinim;
 
         void print(std::ostream& os) const override;
 

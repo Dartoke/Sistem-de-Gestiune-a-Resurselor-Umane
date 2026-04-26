@@ -5,6 +5,7 @@
 #include "angajati.h"
 #include "proiect.h"
 #include "utile.h"
+#include "exceptii.h"
 
 //constructori/destructori
 Departament::Departament(const char* numeDep) { 
@@ -62,7 +63,7 @@ void Departament::stergeAngajat(int id) {
         }
     }
     if (!gasit) {
-        std::cout << "Angajatul cu ID #" << id << " nu exista.\n";
+        throw ExceptieAngajatNegasit(id);
     }
 }
 
@@ -88,7 +89,7 @@ double Departament::costProiectEchipa() const {
 void Departament::viabiliateProiect (const Proiect& p) const{
     double costProiect = costProiectEchipa();
     if (costProiect > p.getBuget()) {
-        std::cout << "\nProiectul ~" << p.getNume() << "~ nu este realizabil din punct de vedere financiar.\n";
+        throw ExceptieProiectNeviabil(p.getNume());
     }
     else {
         std::cout << "\nProiectul ~" << p.getNume() << "~ este realizabil. Buget ramas: " << p.getBuget() - costProiect << std::endl;
@@ -106,7 +107,7 @@ void Departament::maresteSalariuId(double procent, int id){
         }
     }
     if (!gasit) {
-        std::cout << "Angajatul cu ID #" << id << " nu exista.\n";
+        throw ExceptieAngajatNegasit(id);
     }
 }
 
@@ -121,6 +122,6 @@ void Departament::scadereSalariuId(double procent, int id){
         }
     }
     if (!gasit) {
-        std::cout << "Angajatul cu ID #" << id << " nu exista.\n";
+        throw ExceptieAngajatNegasit(id);
     }
 }
