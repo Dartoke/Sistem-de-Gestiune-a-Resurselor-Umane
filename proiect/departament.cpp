@@ -76,6 +76,10 @@ std::ostream& operator<<(std::ostream& os, const Departament& dep) {
     return os;
 }
 
+double Departament::taxeLogistica(double totalSalarii) const {
+    return totalSalarii * 1.2;
+}
+
 //functie de calcul a costului unui proiect
 double Departament::costProiectEchipa() const {
     double total = 0;

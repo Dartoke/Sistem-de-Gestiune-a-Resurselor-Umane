@@ -2,7 +2,7 @@
 #include <iostream>
 #include "exceptii.h"
 
-const double salariuMinimZi = 175;
+const double Contractor::salariuMinimZi = 175;
 
 Contractor::Contractor(const char* nume, int id, double salariuZilnicCTR, int zileLucrateCTR, const std::string& expirare)
 : Angajat(nume, id), salariuZilnic(salariuZilnicCTR), zileLucrate(zileLucrateCTR), dataExpirareContract(expirare) {
