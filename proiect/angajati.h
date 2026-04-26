@@ -1,18 +1,10 @@
-#include <cstring>
+#pragma once
 #include <iostream>
-
-char* copiazaSir(const char* sursa) {
-    if (!sursa) return nullptr;
-    char* dest = new char[strlen(sursa) + 1];
-    strcpy(dest, sursa);
-    return dest;
-}
-
+#include "utile.h"
 
 class Angajat {
 
 private:
-
     char* nume;
     int id;
     double salariu;
@@ -20,57 +12,22 @@ private:
 public:
 
     //constructori/destructori
-    Angajat (const char* numeAng, int idAng, double salariuAng) 
-    : id(idAng), salariu(salariuAng) { 
-        nume = copiazaSir(numeAng); 
-    }
+    Angajat (const char* numeAng, int idAng, double salariuAng);
+    Angajat(const Angajat& altul);
+    Angajat& operator=(const Angajat& altul);
+    ~Angajat();
 
-    Angajat(const Angajat& altul) 
-    : id(altul.id), salariu(altul.salariu) {
-        nume = copiazaSir(altul.nume);
-    }
+    const char* getNume() const;
+    int getId() const;
+    double getSalariu() const;
 
-    Angajat& operator=(const Angajat& altul) {
-        if (this != &altul) {
-            delete[] nume;
-            nume = copiazaSir(altul.nume);
-            id = altul.id;
-            salariu = altul.salariu;
-        }
-        return *this;
-    }
-
-    ~Angajat() {
-        delete[] nume;
-    }
-
-    const char* getNume() const { 
-        return nume; 
-    }
-
-    int getId() const { 
-        return id;              //getteri
-    } 
-
-    double getSalariu() const { 
-        return salariu; 
-    }
 
     // afisare angajat
-    friend std::ostream& operator<<(std::ostream& os, const Angajat& a){
-        os << a.nume << " (#" << a.id << ") | Salariu: " << a.salariu;
-        return os;
-    }
+    friend std::ostream& operator<<(std::ostream& os, const Angajat& a);
 
     //functie de marire a salariului
-    void maresteSalariu(double procent) {
-        salariu += (salariu * procent) / 100.0;
-        std::cout << "\nSalariu nou: " << salariu << "\n";
-    }
+    void maresteSalariu(double procent);
 
     // functie de scadere a salariului
-    void scadeSalariu(double procent) {
-        salariu -= (salariu * procent) / 100.0;
-        std::cout << "\nSalariu nou: " << salariu << "\n";
-    }
+    void scadeSalariu(double procent);
 };
