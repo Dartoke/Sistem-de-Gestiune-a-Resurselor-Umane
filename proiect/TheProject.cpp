@@ -201,6 +201,7 @@ int main(){
 
             case 3: {
                 //afisarea unui departament
+                std::cout << "Total angajati in firma: " << Angajat::getTotalNumarAngajati() << "\n\n";
                 std::cout << "Alege departament (SD - HR - LG - DG): ";
                 std::cin >> dep;
                 Departament& d3 = verificareDepartament(dep, departamente, gasit);

@@ -7,6 +7,7 @@ class Angajat {
 protected:
     char* nume;
     int id;
+    static int numarTotalAngajati;
 
 public:
     Angajat (const char* numeAng, int idAng);
@@ -24,6 +25,8 @@ public:
     virtual Angajat* clone() const = 0;
     virtual void maresteSalariu(double procent) = 0;
     virtual void scadeSalariu(double procent) = 0;
+
+    static int getTotalNumarAngajati();
 
 private:
     virtual void print(std::ostream& os) const = 0;

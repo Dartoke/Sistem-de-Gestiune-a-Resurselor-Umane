@@ -1,16 +1,19 @@
 #include "angajati.h"
 #include <iostream>
 
+int Angajat::numarTotalAngajati = 0;
 
 //constructori/destructori
 Angajat::Angajat (const char* numeAng, int idAng) 
 : id(idAng) { 
     nume = copiazaSir(numeAng); 
+    numarTotalAngajati++;
 }
 
 Angajat::Angajat(const Angajat& altul) 
 : id(altul.id) {
     nume = copiazaSir(altul.nume);
+    numarTotalAngajati++;
 }
 
 Angajat& Angajat::operator=(const Angajat& altul) {
@@ -24,6 +27,7 @@ Angajat& Angajat::operator=(const Angajat& altul) {
 
 Angajat::~Angajat() {
     delete[] nume;
+    numarTotalAngajati--;
 }
 
 const char* Angajat::getNume() const { 
@@ -33,6 +37,10 @@ const char* Angajat::getNume() const {
 int Angajat::getId() const { 
     return id;              //getteri
 } 
+
+int Angajat::getTotalNumarAngajati() {
+    return numarTotalAngajati;
+}
 
 // afisare angajat
 std::ostream& operator<<(std::ostream& os, const Angajat& a){
