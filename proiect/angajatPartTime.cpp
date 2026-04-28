@@ -27,6 +27,14 @@ AngajatPartTime& AngajatPartTime::operator= (const AngajatPartTime& altul) {
 
 AngajatPartTime::~AngajatPartTime() {}
 
+double AngajatPartTime::getsalariuPerOra() const {
+    return salariuPerOra;
+}
+
+int AngajatPartTime::getorePerSaptamana() const {
+    return orePerSaptamana;
+}
+
 double AngajatPartTime::calculeazaSalariu() const {
     return orePerSaptamana * salariuPerOra * 4;
 }

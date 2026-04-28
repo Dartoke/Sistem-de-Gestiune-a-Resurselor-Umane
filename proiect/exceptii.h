@@ -22,10 +22,9 @@ class ExceptieSalariuInvalid : public ExceptieHR {
 
 class ExceptieAngajatNegasit : public ExceptieHR {
     public: 
-        explicit ExceptieAngajatNegasit(int id)
-        : ExceptieHR("Angajatul cu ID #" + std::to_string(id) + " nu a fost gasit") {} 
+        explicit ExceptieAngajatNegasit(const std::string& mesaj)
+        : ExceptieHR(mesaj) {} 
 };
-
 
 class ExceptieProiectNeviabil : public ExceptieHR {
     public: 

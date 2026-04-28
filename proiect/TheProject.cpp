@@ -110,10 +110,11 @@ int main(){
         std::cout << "0: Iesire din program\n";
         std::cout << "1: Angajeaza persoana\n";
         std::cout << "2: Concediaza persoana\n";
-        std::cout << "3: Afiseaza departament\n";
+        std::cout << "3: Baza de date\n";
         std::cout << "4: Mareste salariu\n";
         std::cout << "5: Scade salariu\n";
         std::cout << "6: Verifica viabilitate proiect\n";
+        std::cout << "7: Promoveaza la Full Time\n";
         std::cout << "\nAlege optiune (numarul): ";
         std::cin >> optiune;
         std::cout << "\n";
@@ -200,15 +201,36 @@ int main(){
             }
 
             case 3: {
-                //afisarea unui departament
+                //baza de date
                 std::cout << "Total angajati in firma: " << Angajat::getTotalNumarAngajati() << "\n\n";
-                std::cout << "Alege departament (SD - HR - LG - DG): ";
-                std::cin >> dep;
-                Departament& d3 = verificareDepartament(dep, departamente, gasit);
-                if (gasit) {
-                    std::cout << "\n" << d3 << "\n";
+                std::cout << "Afisare\n1 - Toata firma\n2 - UN singur departament";
+                std::cout << "Alege optiune (numarul): ";
+                std::cin >> optiuneAngajat;
+                switch (optiuneAngajat) {
+                    case 1: {
+                        std::cout << departamente[0] << '\n';
+                        std::cout << departamente[1] << '\n';
+                        std::cout << departamente[2] << '\n';
+                        std::cout << departamente[3] << '\n';
+                        break;
+                    }
+                    
+                    case 2: {
+                        std::cout << "Alege departament (SD - HR - LG - DG): ";
+                        std::cin >> dep;
+                        Departament& d3 = verificareDepartament(dep, departamente, gasit);
+                        if (gasit) {
+                            std::cout << "\n" << d3 << "\n";
+                        }
+                        break;
+                    }
+                    
+                    default: {
+                        std::cout << "Optiune invalida";
+                        continue;
+                    }
                 }
-                break;
+                break;   
             }
 
             case 4: {
@@ -269,16 +291,58 @@ int main(){
                     }
                     std::cout << "\n";
                 } catch (const ExceptieProiectNeviabil& e){
-                    std::cout << e.what() << '\n';                }
+                    std::cout << e.what() << '\n';                
+                }
+                break;
+            }
+
+            case 7: {
+                try {
+                    std::cout << "Tip angajat\n1 - Cotractor\n2 - Part-Time\n";
+                    std::cout << "Alege optiune (numarul): ";
+                    std::cin >> optiuneAngajat;
+                    switch (optiuneAngajat) {
+                        case 1: {
+                            std::cout << "Alege departament (SD - HR - LG - DG): ";
+                            std::cin >> dep;
+                            std::cout << "Introdu id-ul angajatului: ";
+                            std::cin >> idAng;
+                            Departament& d7 = verificareDepartament(dep, departamente, gasit);
+                            if (gasit) {
+                                d7.promoveazaContractor(idAng);
+                            }
+                            std::cout << "\n";
+                            break;
+                        }
+                        case 2: {
+                            std::cout << "Alege departament (SD - HR - LG - DG): ";
+                            std::cin >> dep;
+                            std::cout << "Introdu id-ul angajatului: ";
+                            std::cin >> idAng;
+                            Departament& d7 = verificareDepartament(dep, departamente, gasit);
+                            if (gasit) {
+                                d7.promoveazaPartTime(idAng);
+                            }
+                            std::cout << "\n";
+                            break;
+                        }
+                        default: {
+                            std::cout << "Optiune invalida pentru tip angajat\n";
+                            continue;
+                        }
+                    }
+                } catch (const ExceptieAngajatNegasit& e) {
+                    std::cout << e.what() << "\n";
+                }
                 break;
             }
 
             default:
-                //optiune default in cazul in care se alege un numar nu intre 0-5
+                //optiune default in cazul in care se alege un numar nu intre 0-7
                 if (optiune != 0) {
                     std::cout << "Optiune invalida\n\n";
                 }
-                
+            
         }
     } while (optiune != 0) ;
 

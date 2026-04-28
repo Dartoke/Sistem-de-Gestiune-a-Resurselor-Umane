@@ -17,6 +17,9 @@ class Contractor : public Angajat {
         Contractor& operator= (const Contractor& altul);
         ~Contractor();
 
+        double getSalariuZilnic() const;
+        int getZileLucrate() const;
+
         double calculeazaSalariu() const override;
         std::string getTipContract() const override;
         Contractor* clone() const override;

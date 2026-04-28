@@ -15,6 +15,9 @@ class AngajatPartTime : public Angajat {
         AngajatPartTime& operator= (const AngajatPartTime& altul);
         ~AngajatPartTime ();
 
+        double getsalariuPerOra() const;
+        int getorePerSaptamana() const;
+
         double calculeazaSalariu() const override;
         std::string getTipContract() const override;
         AngajatPartTime* clone() const override;

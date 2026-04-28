@@ -31,5 +31,7 @@ public:
     void viabiliateProiect (const Proiect& p) const;
     void maresteSalariuId(double procent, int id);
     void scadereSalariuId(double procent, int id);
+    void promoveazaContractor(int id);
+    void promoveazaPartTime(int id);
 
 };

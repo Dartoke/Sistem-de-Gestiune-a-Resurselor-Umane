@@ -29,6 +29,14 @@ Contractor& Contractor::operator= (const Contractor& altul) {
 
 Contractor::~Contractor() {}
 
+double Contractor::getSalariuZilnic() const {
+    return salariuZilnic;
+}
+
+int Contractor::getZileLucrate() const {
+    return zileLucrate;
+}
+
 double Contractor::calculeazaSalariu() const {
     return salariuZilnic * zileLucrate;
 }

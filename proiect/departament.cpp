@@ -6,6 +6,9 @@
 #include "proiect.h"
 #include "utile.h"
 #include "exceptii.h"
+#include "contractor.h"
+#include "angajatFullTime.h"
+#include "angajatPartTime.h"
 
 //constructori/destructori
 Departament::Departament(const char* numeDep) { 
@@ -63,7 +66,7 @@ void Departament::stergeAngajat(int id) {
         }
     }
     if (!gasit) {
-        throw ExceptieAngajatNegasit(id);
+        throw ExceptieAngajatNegasit("Angajatul cu ID #" + std::to_string(id) + " nu exista");
     }
 }
 
@@ -111,7 +114,7 @@ void Departament::maresteSalariuId(double procent, int id){
         }
     }
     if (!gasit) {
-        throw ExceptieAngajatNegasit(id);
+        throw ExceptieAngajatNegasit("Angajatul cu ID #" + std::to_string(id) + " nu exista");
     }
 }
 
@@ -126,6 +129,54 @@ void Departament::scadereSalariuId(double procent, int id){
         }
     }
     if (!gasit) {
-        throw ExceptieAngajatNegasit(id);
+        throw ExceptieAngajatNegasit("Angajatul cu ID #" + std::to_string(id) + " nu exista");
+    }
+}
+
+void Departament::promoveazaContractor(int id) {
+    bool gasit = false;
+    for (auto i = echipa.begin(); i != echipa.end(); i++) {
+        if ((*i) -> getId() == id) {
+            Contractor* contractor = dynamic_cast<Contractor*>(*i);
+            if (contractor) {
+                std::string nume = contractor -> getNume();
+                int idAng = contractor -> getId();
+                double salariuLunar = contractor -> getSalariuZilnic() * contractor -> getZileLucrate();
+                delete *i;
+                *i = new AngajatFullTime(nume.c_str(), idAng, salariuLunar, 20, 0);
+            }
+            else {
+                throw ExceptieAngajatNegasit("Angajatul cu ID #" + std::to_string(id) + " nu este contractor");
+            }
+            gasit = true;
+            break;
+        }
+    }
+    if (!gasit) {
+        throw ExceptieAngajatNegasit("Angajatul cu ID #" + std::to_string(id) + " nu exista");
+    }
+}
+
+void Departament::promoveazaPartTime(int id) {
+    bool gasit = false;
+    for (auto i = echipa.begin(); i != echipa.end(); i++) {
+        if ((*i) -> getId() == id) {
+            AngajatPartTime* partTime = dynamic_cast<AngajatPartTime*>(*i);
+            if (partTime) {
+                std::string nume = partTime -> getNume();
+                int idAng = partTime -> getId();
+                double salariuLunar = partTime -> getsalariuPerOra() * partTime -> getorePerSaptamana();
+                delete *i;
+                *i = new AngajatFullTime(nume.c_str(), idAng, salariuLunar, 20, 0);
+            }
+            else {
+                throw ExceptieAngajatNegasit("Angajatul cu ID #" + std::to_string(id) + " nu este angajat part-time");
+            }
+            gasit = true;
+            break;
+        }
+    }
+    if (!gasit) {
+        throw ExceptieAngajatNegasit("Angajatul cu ID #" + std::to_string(id) + " nu exista");
     }
 }
