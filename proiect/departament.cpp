@@ -144,6 +144,7 @@ void Departament::promoveazaContractor(int id) {
                 double salariuLunar = contractor -> getSalariuZilnic() * contractor -> getZileLucrate();
                 delete *i;
                 *i = new AngajatFullTime(nume.c_str(), idAng, salariuLunar, 20, 0);
+                std::cout << "\n~" << nume << "~ a fost promovat la Full-Time cu succes!\n";
             }
             else {
                 throw ExceptieAngajatNegasit("Angajatul cu ID #" + std::to_string(id) + " nu este contractor");
@@ -168,6 +169,7 @@ void Departament::promoveazaPartTime(int id) {
                 double salariuLunar = partTime -> getsalariuPerOra() * partTime -> getorePerSaptamana();
                 delete *i;
                 *i = new AngajatFullTime(nume.c_str(), idAng, salariuLunar, 20, 0);
+                std::cout << "\n~" << nume << "~ a fost promovat la Full-Time cu succes!\n";
             }
             else {
                 throw ExceptieAngajatNegasit("Angajatul cu ID #" + std::to_string(id) + " nu este angajat part-time");

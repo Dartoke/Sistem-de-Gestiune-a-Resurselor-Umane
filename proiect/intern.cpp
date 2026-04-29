@@ -1,6 +1,7 @@
 #include <iostream>
 #include "intern.h"
 #include "exceptii.h"
+#include <string>
 
 
 Intern::Intern(const char* nume, int id, double stipendiu, int durataInternship, const std::string& numeMentor)

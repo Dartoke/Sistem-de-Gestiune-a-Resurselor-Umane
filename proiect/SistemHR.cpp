@@ -20,7 +20,7 @@ Departament& verificareDepartament (const char* dep, std::vector<Departament>& d
     if (strcmp(dep, "DG") == 0) return departamente[3];
 
     gasit = false;
-    std::cout << "Nu exista acest departament\n";
+    std::cout << "Nu exista acest departament\n\n";
     return departamente[0]; //returnare aleatorie
 }
 
@@ -140,7 +140,7 @@ int main(){
                 std::cin.getline(numeAng, 100);
                 std::cout << "Id persoana: ";
                 std::cin >> idAng;
-                std::cout <<"Tip angajat\n1 - Full Time\n2 - Part Time\n3 - Contractor\n4 - Internship\n";
+                std::cout <<"\nTip angajat\n1 - Full Time\n2 - Part Time\n3 - Contractor\n4 - Internship\n";
                 std::cout << "\nAlege optiune (numarul): ";
                 std::cin >> optiuneAngajat;
                 switch (optiuneAngajat) {
@@ -184,7 +184,7 @@ int main(){
                         break;
                     }
                     default:
-                        std::cout << "Optiune invalida pentru tip angajat\n";
+                        std::cout << "Optiune invalida pentru tip angajat\n\n";
                         continue;
                 }
                 if (a != nullptr) {
@@ -222,7 +222,7 @@ int main(){
             case 3: {
                 //baza de date
                 std::cout << "Total angajati in firma: " << Angajat::getTotalNumarAngajati() << "\n\n";
-                std::cout << "Afisare\n1 - Toata firma\n2 - UN singur departament";
+                std::cout << "Afisare\n1 - Toata firma\n2 - Un singur departament\n\n";
                 std::cout << "Alege optiune (numarul): ";
                 std::cin >> optiuneAngajat;
                 switch (optiuneAngajat) {
@@ -245,7 +245,7 @@ int main(){
                     }
                     
                     default: {
-                        std::cout << "Optiune invalida";
+                        std::cout << "Optiune invalida\n\n";
                         continue;
                     }
                 }
@@ -317,7 +317,7 @@ int main(){
 
             case 7: {
                 try {
-                    std::cout << "Tip angajat\n1 - Cotractor\n2 - Part-Time\n";
+                    std::cout << "Tip angajat\n1 - Contractor\n2 - Part-Time\n\n";
                     std::cout << "Alege optiune (numarul): ";
                     std::cin >> optiuneAngajat;
                     switch (optiuneAngajat) {
