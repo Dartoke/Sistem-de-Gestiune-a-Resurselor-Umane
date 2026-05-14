@@ -1,0 +1,100 @@
+Full Time % Madalina Diaconu % 101 % 7000 % 25 % 11
+Intern % Diana Georgescu % 102 % 2500 % 6 % Vlad Marin
+Contractor % Cosmin Manea % 103 % 400 % 17 % 15-02-2026
+Full Time % Bianca Toma % 104 % 9000 % 22 % 3
+Full Time % Andreea Toma % 105 % 9000 % 21 % 9
+Intern % Octavian Florescu % 106 % 2200 % 6 % Ion Pop
+Intern % Monica Pop % 107 % 2200 % 3 % Ion Pop
+Contractor % Ion Cristea % 108 % 300 % 38 % 25-03-2027
+Full Time % Laura Ionescu % 109 % 4500 % 21 % 13
+Intern % Catalin Mocanu % 110 % 1500 % 12 % Mihai Stan
+Full Time % Adrian Popa % 111 % 5000 % 23 % 0
+Part Time % Mihaela Manea % 112 % 30 % 35
+Intern % Ana Costache % 113 % 1800 % 6 % Ioana Constantinescu
+Contractor % Larisa Dinu % 114 % 250 % 23 % 21-05-2027
+Contractor % Dan Marin % 115 % 250 % 23 % 09-04-2026
+Contractor % Bogdan Costache % 116 % 500 % 42 % 28-10-2027
+Intern % Eduard Iancu % 117 % 1500 % 6 % Maria Ionescu
+Full Time % Diana Petrescu % 118 % 5500 % 23 % 15
+Contractor % Razvan Cristea % 119 % 300 % 36 % 11-12-2026
+Intern % Adrian Mihai % 120 % 2000 % 12 % George Dumitrescu
+Contractor % Simona Radu % 121 % 500 % 34 % 20-05-2027
+Intern % Roxana Radu % 122 % 2500 % 9 % Ion Pop
+Full Time % Cosmin Popescu % 123 % 5000 % 25 % 7
+Full Time % Stefan Popescu % 124 % 6500 % 21 % 10
+Contractor % Anca Vlad % 125 % 600 % 31 % 25-06-2026
+Contractor % Daniela Manea % 126 % 350 % 23 % 04-10-2027
+Contractor % Elena Costache % 127 % 300 % 31 % 02-04-2026
+Full Time % Stefan Constantinescu % 128 % 6000 % 22 % 4
+Part Time % Cristian Pop % 129 % 15 % 50
+Part Time % Ioana Nistor % 130 % 20 % 60
+Part Time % Florin Diaconu % 131 % 20 % 40
+Intern % Razvan Costache % 132 % 2000 % 6 % Ion Pop
+Part Time % Sorin Mocanu % 133 % 15 % 60
+Part Time % Daniela Munteanu % 134 % 30 % 40
+Full Time % Diana Andrei % 135 % 7500 % 25 % 6
+Part Time % Gabriela Nistor % 136 % 30 % 35
+Full Time % Anca Stefan % 137 % 5000 % 22 % 11
+Full Time % Radu Mocanu % 138 % 5000 % 21 % 8
+Contractor % Marius Constantinescu % 139 % 350 % 32 % 04-03-2027
+Contractor % Roxana Stefan % 140 % 250 % 20 % 02-02-2027
+Contractor % Stefan Constantinescu % 141 % 250 % 53 % 15-05-2026
+Intern % Sorin Stefan % 142 % 2200 % 3 % Andrei Popescu
+Intern % Simona Diaconu % 143 % 2000 % 12 % Vlad Marin
+Full Time % Vasile Andrei % 144 % 7000 % 23 % 8
+Contractor % Simona Dumitrescu % 145 % 250 % 58 % 12-10-2026
+Part Time % Nicoleta Stefan % 146 % 25 % 40
+Contractor % Adrian Munteanu % 147 % 250 % 16 % 10-06-2027
+Part Time % Vasile Munteanu % 148 % 25 % 70
+Contractor % Razvan Popescu % 149 % 250 % 22 % 18-05-2026
+Intern % Roxana Gheorghe % 150 % 1800 % 9 % Ana Popa
+Intern % Ion Toma % 151 % 2500 % 12 % George Dumitrescu
+Contractor % Eduard Iancu % 152 % 600 % 53 % 11-02-2026
+Full Time % Elena Florescu % 153 % 6000 % 23 % 6
+Contractor % Eduard Marin % 154 % 750 % 49 % 20-11-2026
+Full Time % Gabriela Constantinescu % 155 % 5500 % 21 % 2
+Intern % Monica Toma % 156 % 2200 % 9 % Ioana Constantinescu
+Part Time % Alexandra Andrei % 157 % 30 % 50
+Intern % Octavian Gheorghe % 158 % 2500 % 3 % Ioana Constantinescu
+Full Time % Lucian Radu % 159 % 5500 % 22 % 12
+Part Time % Anca Iancu % 160 % 15 % 70
+Part Time % Radu Mihai % 161 % 20 % 70
+Intern % Carmen Mocanu % 162 % 1800 % 6 % Maria Ionescu
+Full Time % Razvan Toma % 163 % 10000 % 23 % 7
+Contractor % Daniel Pop % 164 % 750 % 16 % 10-08-2026
+Contractor % Catalin Andrei % 165 % 300 % 34 % 08-02-2026
+Full Time % Vlad Andrei % 166 % 4500 % 23 % 5
+Intern % Iulia Mocanu % 167 % 2500 % 3 % Ion Pop
+Full Time % Octavian Tudor % 168 % 6000 % 23 % 13
+Full Time % Laura Diaconu % 169 % 5000 % 21 % 3
+Full Time % Cristian Vlad % 170 % 10000 % 23 % 7
+Contractor % Iulia Manea % 171 % 350 % 60 % 12-05-2026
+Intern % Andrei Vlad % 172 % 2500 % 9 % Ion Pop
+Intern % Oana Cristea % 173 % 1500 % 6 % Ion Pop
+Part Time % Laura Radu % 174 % 15 % 40
+Part Time % Ion Mihai % 175 % 20 % 40
+Part Time % Cristina Manea % 176 % 25 % 60
+Part Time % Iulia Diaconu % 177 % 15 % 35
+Contractor % Eduard Nistor % 178 % 750 % 48 % 24-10-2026
+Full Time % Florin Vlad % 179 % 9000 % 23 % 12
+Intern % Octavian Tudor % 180 % 2500 % 3 % Vlad Marin
+Contractor % Vlad Pop % 181 % 300 % 17 % 17-10-2026
+Part Time % Radu Georgescu % 182 % 15 % 35
+Intern % Ion Radu % 183 % 1800 % 3 % Andrei Popescu
+Intern % Ioana Costache % 184 % 2200 % 6 % Andrei Popescu
+Part Time % Elena Stoica % 185 % 15 % 40
+Intern % Gabriela Vasile % 186 % 2500 % 3 % Vlad Marin
+Full Time % Maria Diaconu % 187 % 10000 % 22 % 8
+Part Time % Gabriela Popescu % 188 % 25 % 40
+Part Time % Stefan Andrei % 189 % 15 % 50
+Intern % Andrei Dumitrescu % 190 % 1500 % 3 % Andrei Popescu
+Full Time % Cristina Constantinescu % 191 % 6500 % 21 % 6
+Contractor % Alexandra Vlad % 192 % 500 % 49 % 07-05-2027
+Full Time % Larisa Stefan % 193 % 5500 % 21 % 10
+Part Time % Laura Dumitrescu % 194 % 20 % 50
+Part Time % Alexandra Vlad % 195 % 25 % 60
+Full Time % George Constantinescu % 196 % 6000 % 22 % 8
+Part Time % Laura Manea % 197 % 15 % 70
+Contractor % Catalin Costache % 198 % 400 % 29 % 28-07-2027
+Part Time % Ana Tudor % 199 % 30 % 60
+Contractor % Andrei Vasile % 200 % 450 % 28 % 03-02-2026

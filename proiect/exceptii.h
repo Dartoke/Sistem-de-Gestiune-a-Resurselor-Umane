@@ -12,6 +12,15 @@ class ExceptieHR : public std::exception {
         }
 };
 
+class ExceptieFisier : public std::exception {
+    std::string mesaj;
+    public:
+        ExceptieFisier(const std::string& nume_fisier) 
+        : mesaj("Eroare la deschiderea fisierului: " + nume_fisier) {}
+        const char* what() const noexcept override {
+            return mesaj.c_str();
+        }
+};
 
 class ExceptieSalariuInvalid : public ExceptieHR {
     public:
@@ -30,4 +39,10 @@ class ExceptieProiectNeviabil : public ExceptieHR {
     public: 
         explicit ExceptieProiectNeviabil(const std::string& numeP) 
         : ExceptieHR("Proiectul ~" + numeP + "~ nu este realizabil") {}
+};
+
+class ExceptieTipGresit : public ExceptieHR {
+    public:
+        explicit ExceptieTipGresit(const std::string& mesaj) 
+        : ExceptieHR(mesaj) {}
 };

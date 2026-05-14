@@ -2,6 +2,8 @@
 #include <cstring>
 #include <vector>
 #include <fstream>
+#include <random>
+#include <algorithm>
 #include "angajati.h"
 #include "proiect.h"
 #include "departament.h"
@@ -10,6 +12,7 @@
 #include "contractor.h"
 #include "exceptii.h"
 #include "intern.h"
+#include "angajatFactory.h"
 
 //functie care verifica daca un departament exista
 Departament& verificareDepartament (const char* dep, std::vector<Departament>& departamente, bool& gasit){
@@ -22,25 +25,6 @@ Departament& verificareDepartament (const char* dep, std::vector<Departament>& d
     gasit = false;
     std::cout << "Nu exista acest departament\n\n";
     return departamente[0]; //returnare aleatorie
-}
-
-//functie de adaugare angajati din fisier de intrare ( OBLIGATORIU LA INCEPUT PENTRU A AVEA CATIVA ANGAJATI IN DEPARTAMENTE !!!)
-void adaugaDinFisier(const Angajat& a, std::vector<Departament>& departamente) {
-    char dep[100];
-    bool ok = false;
-    do{
-        std::cout << "Angajeaza pe ~" << a << "~ intr-un departament -> SD - HR - LG - DG: ";
-        std::cin >> dep;
-        bool gasit = false;
-
-        Departament& ales = verificareDepartament(dep, departamente, gasit);
-        
-        if(gasit) {
-            ales.adaugaAngajat(a);
-            ok = true;
-        }
-
-    } while (!ok);
 }
 
 
@@ -64,7 +48,13 @@ int main(){
     char separator;
     std::string dateExpirareContract, numeMentor;
 
-    //adaugarea din fisier, se apeleaza functia de mai sus
+    std::vector<Angajat*> angajati;
+
+    try {
+        if (!fin.is_open()) {
+            throw ExceptieFisier(nume_fisier);
+        }
+
     while (fin.getline(tipContract, sizeof(tipContract), '%')) {
 
         char* start = tipContract;
@@ -77,22 +67,19 @@ int main(){
         if (strcmp(start, "Full Time") == 0) {
             fin.getline(numeAng, sizeof(numeAng), '%');
             fin >> idAng >> separator >> salariuAng >> separator >> zileConcediu >> separator >> aniVechime;
-            AngajatFullTime a(numeAng, idAng, salariuAng, zileConcediu, aniVechime);
-            adaugaDinFisier(a, departamente);
+            angajati.push_back(AngajatFactory::creeazaFullTime(numeAng, idAng, salariuAng, zileConcediu, aniVechime));
             fin.ignore(1000, '\n');
         }
         else if (strcmp(start, "Part Time") == 0) {
             fin.getline(numeAng, sizeof(numeAng), '%');
             fin >> idAng >> separator >> orePerSaptamana >> separator >> salariuPerOra;
-            AngajatPartTime a(numeAng, idAng, orePerSaptamana, salariuPerOra);
-            adaugaDinFisier(a, departamente);
+            angajati.push_back(AngajatFactory::creeazaPartTime(numeAng, idAng, orePerSaptamana, salariuPerOra));
             fin.ignore(1000, '\n');
         }
         else if (strcmp(start, "Contractor") == 0) {
             fin.getline(numeAng, sizeof(numeAng), '%');
             fin >> idAng >> separator >> salariuZilnic >> separator >> zileLucrate >> separator >> dateExpirareContract;
-            Contractor a(numeAng, idAng, salariuZilnic, zileLucrate, dateExpirareContract);
-            adaugaDinFisier(a, departamente);
+            angajati.push_back(AngajatFactory::creeazaContractor(numeAng, idAng, salariuZilnic, zileLucrate, dateExpirareContract));
             fin.ignore(1000, '\n');
         }
         else if (strcmp(start, "Intern") == 0) {
@@ -100,11 +87,33 @@ int main(){
             fin >> idAng >> separator >> stipendiu >> separator >> durataInternship >> separator;
             fin.ignore(1000, '\n');
             std::getline(fin, numeMentor);
-            Intern a(numeAng, idAng, stipendiu, durataInternship, numeMentor);
-            adaugaDinFisier(a, departamente);
+            angajati.push_back(AngajatFactory::creeazaIntern(numeAng, idAng, stipendiu, durataInternship, numeMentor));
         }
     }
     fin.close();
+
+    } catch (const ExceptieFisier& e) {
+        std::cout << '\n' << e.what() << "\n\n";
+    }
+
+
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(angajati.begin(), angajati.end(), g);
+
+    size_t nrAngajatiSelectati = 60; 
+    if (angajati.size() < nrAngajatiSelectati) {
+        nrAngajatiSelectati = angajati.size();
+    }
+
+    for (int i = 0; i < nrAngajatiSelectati; i++) {
+        departamente[i % 4].adaugaAngajat(*angajati[i]);
+    }
+
+    for (auto* a : angajati) {
+        delete a;
+    }
+    angajati.clear();
 
     //inceputul gestiunii propriu-zise
     std::cout << "\nBine ai venit, e timpul sa gestionezi firma la care lucrezi.\n\n";
@@ -127,6 +136,7 @@ int main(){
         std::cin >> optiune;
         std::cout << "\n";
 
+        try {
         switch (optiune) {
             case 0: 
                 //iesirea din program
@@ -151,7 +161,7 @@ int main(){
                         std::cin >> zileConcediu;
                         std::cout << "Ani Vechime: ";
                         std::cin >> aniVechime;
-                        a = new AngajatFullTime(numeAng, idAng, salariuAng, zileConcediu, aniVechime);
+                        a = AngajatFactory::creeazaFullTime(numeAng, idAng, salariuAng, zileConcediu, aniVechime);
                         break;
                     }
                     case 2: {
@@ -159,7 +169,7 @@ int main(){
                         std::cin >> orePerSaptamana;
                         std::cout << "Salariu pe ora: ";
                         std::cin >> salariuPerOra;
-                        a = new AngajatPartTime(numeAng, idAng, orePerSaptamana, salariuPerOra);
+                        a = AngajatFactory::creeazaPartTime(numeAng, idAng, orePerSaptamana, salariuPerOra);
                         break;
                     }
                     case 3: {
@@ -169,7 +179,7 @@ int main(){
                         std::cin >> zileLucrate;
                         std::cout << "Data expirare contract (format: DD-MM-YYYY): ";
                         std::cin >> dateExpirareContract;
-                        a = new Contractor(numeAng, idAng, salariuZilnic, zileLucrate, dateExpirareContract);
+                        a = AngajatFactory::creeazaContractor(numeAng, idAng, salariuZilnic, zileLucrate, dateExpirareContract);
                         break;
                     }
                     case 4: {
@@ -180,7 +190,7 @@ int main(){
                         std::cout << "Nume mentor: ";
                         std::cin.ignore();
                         std::getline(std::cin, numeMentor);
-                        a = new Intern(numeAng, idAng, stipendiu, durataInternship, numeMentor);
+                        a = AngajatFactory::creeazaIntern(numeAng, idAng, stipendiu, durataInternship, numeMentor);
                         break;
                     }
                     default:
@@ -203,19 +213,15 @@ int main(){
 
             case 2: {
                 //stergerea de angajat dintr-un departament
-                try {
-                    std::cout << "Alege departament (SD - HR - LG - DG): ";
-                    std::cin >> dep;
-                    std::cout << "Introdu id-ul angajatului: ";
-                    std::cin >> idAng;
-                    Departament& d2 = verificareDepartament(dep, departamente, gasit);
-                    if (gasit) {
-                        d2.stergeAngajat(idAng);
-                    }
-                    std::cout << "\n";
-                } catch (const ExceptieAngajatNegasit& e) {
-                    std::cout << e.what() << "\n";
+                std::cout << "Alege departament (SD - HR - LG - DG): ";
+                std::cin >> dep;
+                std::cout << "Introdu id-ul angajatului: ";
+                std::cin >> idAng;
+                Departament& d2 = verificareDepartament(dep, departamente, gasit);
+                if (gasit) {
+                    d2.stergeAngajat(idAng);
                 }
+                std::cout << "\n";
                 break;
             }
 
@@ -254,40 +260,32 @@ int main(){
 
             case 4: {
                 //marirea unui salariu cu un procent
-                try { 
-                    std::cout << "Alege departament (SD - HR - LG - DG): ";
-                    std::cin >> dep;
-                    std::cout << "Introdu id-ul angajatului: ";
-                    std::cin >> idAng;
-                    std::cout << "Procent marire: ";
-                    std::cin >> procent;
-                    Departament& d4 = verificareDepartament(dep, departamente, gasit);
-                    if (gasit) {
-                        d4.maresteSalariuId(procent, idAng);
-                    }
-                    std::cout << "\n";
-                } catch (const ExceptieAngajatNegasit& e) {
-                    std::cout << e.what() << "\n";
+                std::cout << "Alege departament (SD - HR - LG - DG): ";
+                std::cin >> dep;
+                std::cout << "Introdu id-ul angajatului: ";
+                std::cin >> idAng;
+                std::cout << "Procent marire: ";
+                std::cin >> procent;
+                Departament& d4 = verificareDepartament(dep, departamente, gasit);
+                if (gasit) {
+                    d4.maresteSalariuId(procent, idAng);
                 }
+                std::cout << "\n";
                 break;
             }
             case 5: {
                 //scaderea unui salariu cu un procent
-                try {
-                    std::cout << "Alege departament(SD - HR - LG - DG): ";
-                    std::cin >> dep;
-                    std::cout << "Introdu id-ul angajatului: ";
-                    std::cin >> idAng;
-                    std::cout << "Procent scadere: ";
-                    std::cin >> procent;
-                    Departament& d5 = verificareDepartament(dep, departamente, gasit);
-                    if (gasit) {
-                        d5.scadereSalariuId(procent, idAng);
-                    }
-                    std::cout << "\n";
-                } catch (const ExceptieAngajatNegasit& e) {
-                    std::cout << e.what() << "\n";
+                std::cout << "Alege departament(SD - HR - LG - DG): ";
+                std::cin >> dep;
+                std::cout << "Introdu id-ul angajatului: ";
+                std::cin >> idAng;
+                std::cout << "Procent scadere: ";
+                std::cin >> procent;
+                Departament& d5 = verificareDepartament(dep, departamente, gasit);
+                if (gasit) {
+                    d5.scadereSalariuId(procent, idAng);
                 }
+                std::cout << "\n";
                 break;
             }
             
@@ -295,63 +293,55 @@ int main(){
                 //verificarea viabilitatii unui proiect, proiect introdus de user de la tastatura
                 char numeProiect[100];
                 double buget;
-                try {
-                    std::cout << "Nume proiect: ";
-                    std::cin.ignore();
-                    std::cin.getline(numeProiect, 100);
-                    std::cout << "Buget proiect: ";
-                    std::cin >> buget;
-                    std::cout << "Alege departament (SD - HR - LG - DG): ";
-                    std::cin >> dep;
-                    Departament& d6 = verificareDepartament(dep, departamente, gasit);
-                    if (gasit) {
-                        Proiect p(numeProiect, buget);
-                        d6.viabiliateProiect(p);
-                    }
-                    std::cout << "\n";
-                } catch (const ExceptieProiectNeviabil& e){
-                    std::cout << e.what() << '\n';                
+                std::cout << "Nume proiect: ";
+                std::cin.ignore();
+                std::cin.getline(numeProiect, 100);
+                std::cout << "Buget proiect: ";
+                std::cin >> buget;
+                std::cout << "Alege departament (SD - HR - LG - DG): ";
+                std::cin >> dep;
+                Departament& d6 = verificareDepartament(dep, departamente, gasit);
+                if (gasit) {
+                    Proiect p(numeProiect, buget);
+                    d6.viabilitateProiect(p);
                 }
+                std::cout << "\n";
                 break;
             }
 
             case 7: {
-                try {
-                    std::cout << "Tip angajat\n1 - Contractor\n2 - Part-Time\n\n";
-                    std::cout << "Alege optiune (numarul): ";
-                    std::cin >> optiuneAngajat;
-                    switch (optiuneAngajat) {
-                        case 1: {
-                            std::cout << "Alege departament (SD - HR - LG - DG): ";
-                            std::cin >> dep;
-                            std::cout << "Introdu id-ul angajatului: ";
-                            std::cin >> idAng;
-                            Departament& d7 = verificareDepartament(dep, departamente, gasit);
-                            if (gasit) {
-                                d7.promoveazaContractor(idAng);
-                            }
-                            std::cout << "\n";
-                            break;
+                std::cout << "Tip angajat\n1 - Contractor\n2 - Part-Time\n\n";
+                std::cout << "Alege optiune (numarul): ";
+                std::cin >> optiuneAngajat;
+                switch (optiuneAngajat) {
+                    case 1: {
+                        std::cout << "Alege departament (SD - HR - LG - DG): ";
+                        std::cin >> dep;
+                        std::cout << "Introdu id-ul angajatului: ";
+                        std::cin >> idAng;
+                        Departament& d7 = verificareDepartament(dep, departamente, gasit);
+                        if (gasit) {
+                            d7.promoveazaContractor(idAng);
                         }
-                        case 2: {
-                            std::cout << "Alege departament (SD - HR - LG - DG): ";
-                            std::cin >> dep;
-                            std::cout << "Introdu id-ul angajatului: ";
-                            std::cin >> idAng;
-                            Departament& d7 = verificareDepartament(dep, departamente, gasit);
-                            if (gasit) {
-                                d7.promoveazaPartTime(idAng);
-                            }
-                            std::cout << "\n";
-                            break;
-                        }
-                        default: {
-                            std::cout << "Optiune invalida pentru tip angajat\n";
-                            continue;
-                        }
+                        std::cout << "\n";
+                        break;
                     }
-                } catch (const ExceptieAngajatNegasit& e) {
-                    std::cout << e.what() << "\n";
+                    case 2: {
+                        std::cout << "Alege departament (SD - HR - LG - DG): ";
+                        std::cin >> dep;
+                        std::cout << "Introdu id-ul angajatului: ";
+                        std::cin >> idAng;
+                        Departament& d7 = verificareDepartament(dep, departamente, gasit);
+                        if (gasit) {
+                            d7.promoveazaPartTime(idAng);
+                        }
+                        std::cout << "\n";
+                        break;
+                    }
+                    default: {
+                        std::cout << "Optiune invalida pentru tip angajat\n";
+                        continue;
+                    }
                 }
                 break;
             }
@@ -363,6 +353,11 @@ int main(){
                 }
             
         }
+        } catch (const ExceptieHR& e) {
+            std::cout << '\n' <<  e.what() << "\n\n";
+        } catch (const std::exception& e) {
+            std::cout << "\n" << "Eroare neasteptata: " << e.what() << "\n\n";
+        }       
     } while (optiune != 0) ;
 
     return 0;

@@ -93,7 +93,7 @@ double Departament::costProiectEchipa() const {
 }
 
 //functie care verifica daca un departament poate face proiectul ( in functie de bugetul alocat )
-void Departament::viabiliateProiect (const Proiect& p) const{
+void Departament::viabilitateProiect (const Proiect& p) const{
     double costProiect = costProiectEchipa();
     if (costProiect > p.getBuget()) {
         throw ExceptieProiectNeviabil(p.getNume());
@@ -134,51 +134,41 @@ void Departament::scadereSalariuId(double procent, int id){
 }
 
 void Departament::promoveazaContractor(int id) {
-    bool gasit = false;
     for (auto i = echipa.begin(); i != echipa.end(); i++) {
         if ((*i) -> getId() == id) {
             Contractor* contractor = dynamic_cast<Contractor*>(*i);
-            if (contractor) {
-                std::string nume = contractor -> getNume();
-                int idAng = contractor -> getId();
-                double salariuLunar = contractor -> getSalariuZilnic() * contractor -> getZileLucrate();
-                delete *i;
-                *i = new AngajatFullTime(nume.c_str(), idAng, salariuLunar, 20, 0);
-                std::cout << "\n~" << nume << "~ a fost promovat la Full-Time cu succes!\n";
+            if (!contractor) {
+                throw ExceptieTipGresit("Angajatul cu ID #" + std::to_string(id) + " nu este contractor");
             }
-            else {
-                throw ExceptieAngajatNegasit("Angajatul cu ID #" + std::to_string(id) + " nu este contractor");
-            }
-            gasit = true;
-            break;
+            std::string nume = contractor -> getNume();
+            int idAng = contractor -> getId();
+            double salariuLunar = contractor -> getSalariuZilnic() * contractor -> getZileLucrate();
+            Angajat* nou = new AngajatFullTime(nume.c_str(), idAng, salariuLunar, 20, 0);
+            delete *i;
+            *i = nou;
+            std::cout << "\n~" << nume << "~ a fost promovat la Full-Time cu succes!\n";
+            return;
         }
     }
-    if (!gasit) {
-        throw ExceptieAngajatNegasit("Angajatul cu ID #" + std::to_string(id) + " nu exista");
-    }
+    throw ExceptieAngajatNegasit("Angajatul cu ID #" + std::to_string(id) + " nu exista");
 }
 
 void Departament::promoveazaPartTime(int id) {
-    bool gasit = false;
     for (auto i = echipa.begin(); i != echipa.end(); i++) {
         if ((*i) -> getId() == id) {
             AngajatPartTime* partTime = dynamic_cast<AngajatPartTime*>(*i);
-            if (partTime) {
-                std::string nume = partTime -> getNume();
-                int idAng = partTime -> getId();
-                double salariuLunar = partTime -> getsalariuPerOra() * partTime -> getorePerSaptamana();
-                delete *i;
-                *i = new AngajatFullTime(nume.c_str(), idAng, salariuLunar, 20, 0);
-                std::cout << "\n~" << nume << "~ a fost promovat la Full-Time cu succes!\n";
-            }
-            else {
-                throw ExceptieAngajatNegasit("Angajatul cu ID #" + std::to_string(id) + " nu este angajat part-time");
-            }
-            gasit = true;
-            break;
+            if (!partTime) {
+                throw ExceptieTipGresit("Angajatul cu ID #" + std::to_string(id) + " nu este part-time");
+            } 
+            std::string nume = partTime -> getNume();
+            int idAng = partTime -> getId();
+            double salariuLunar = partTime -> getsalariuPerOra() * partTime -> getorePerSaptamana() * 4;
+            Angajat* nou = new AngajatFullTime(nume.c_str(), idAng, salariuLunar, 20, 0);
+            delete *i;
+            *i = nou;
+            std::cout << "\n~" << nume << "~ a fost promovat la Full-Time cu succes!\n";
+            return;
         }
     }
-    if (!gasit) {
-        throw ExceptieAngajatNegasit("Angajatul cu ID #" + std::to_string(id) + " nu exista");
-    }
+    throw ExceptieAngajatNegasit("Angajatul cu ID #" + std::to_string(id) + " nu exista");
 }

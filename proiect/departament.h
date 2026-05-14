@@ -28,7 +28,7 @@ public:
     void stergeAngajat(int id);
     friend std::ostream& operator<<(std::ostream& os, const Departament& dep);
     double costProiectEchipa() const;
-    void viabiliateProiect (const Proiect& p) const;
+    void viabilitateProiect (const Proiect& p) const;
     void maresteSalariuId(double procent, int id);
     void scadereSalariuId(double procent, int id);
     void promoveazaContractor(int id);
