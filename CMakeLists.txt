@@ -14,4 +14,5 @@ add_executable(SistemHR
     proiect/departament.cpp
     proiect/proiect.cpp
     proiect/intern.cpp
+    proiect/angajatFactory.cpp
 )
