@@ -13,29 +13,10 @@
 #include "exceptii.h"
 #include "intern.h"
 #include "angajatFactory.h"
-
-//functie care verifica daca un departament exista
-Departament& verificareDepartament (const char* dep, std::vector<Departament>& departamente, bool& gasit){
-    gasit = true;
-    if (strcmp(dep, "SD") == 0) return departamente[0];
-    if (strcmp(dep, "HR") == 0) return departamente[1];
-    if (strcmp(dep, "LG") == 0) return departamente[2];
-    if (strcmp(dep, "DG") == 0) return departamente[3];
-
-    gasit = false;
-    std::cout << "Nu exista acest departament\n\n";
-    return departamente[0]; //returnare aleatorie
-}
+#include "sistem.h"
 
 
 int main(){
-
-    std::vector<Departament> departamente = { 
-        Departament("Software Development"),
-        Departament("Human Resources"),
-        Departament("Logistics"),
-        Departament("Design")
-    };
 
     char nume_fisier[100];
     std::cout << "Nume fisier cu viitorii angajati: ";
@@ -49,6 +30,7 @@ int main(){
     std::string dateExpirareContract, numeMentor;
 
     std::vector<Angajat*> angajati;
+    SistemHR& sistem = SistemHR::getInstance();
 
     try {
         if (!fin.is_open()) {
@@ -107,7 +89,7 @@ int main(){
     }
 
     for (int i = 0; i < nrAngajatiSelectati; i++) {
-        departamente[i % 4].adaugaAngajat(*angajati[i]);
+        sistem.getDepartamente()[i % 4].adaugaAngajat(*angajati[i]);
     }
 
     for (auto* a : angajati) {
@@ -201,7 +183,7 @@ int main(){
                     std::cout << "Departament (SD - HR - LG - DG): ";
                     std::cin >> dep;
                     
-                    Departament& d1 = verificareDepartament(dep, departamente, gasit);
+                    Departament& d1 = sistem.cautaDepartament(dep, gasit);
                     if (gasit) {
                         d1.adaugaAngajat(*a);
                         std::cout << "\n~" << numeAng <<"~ a fost angajat cu succes!\n\n";
@@ -217,7 +199,7 @@ int main(){
                 std::cin >> dep;
                 std::cout << "Introdu id-ul angajatului: ";
                 std::cin >> idAng;
-                Departament& d2 = verificareDepartament(dep, departamente, gasit);
+                Departament& d2 = sistem.cautaDepartament(dep, gasit);
                 if (gasit) {
                     d2.stergeAngajat(idAng);
                 }
@@ -233,17 +215,17 @@ int main(){
                 std::cin >> optiuneAngajat;
                 switch (optiuneAngajat) {
                     case 1: {
-                        std::cout << departamente[0] << '\n';
-                        std::cout << departamente[1] << '\n';
-                        std::cout << departamente[2] << '\n';
-                        std::cout << departamente[3] << '\n';
+                        std::cout << sistem.getDepartamente()[0] << '\n';
+                        std::cout << sistem.getDepartamente()[1] << '\n';
+                        std::cout << sistem.getDepartamente()[2] << '\n';
+                        std::cout << sistem.getDepartamente()[3] << '\n';
                         break;
                     }
                     
                     case 2: {
                         std::cout << "Alege departament (SD - HR - LG - DG): ";
                         std::cin >> dep;
-                        Departament& d3 = verificareDepartament(dep, departamente, gasit);
+                        Departament& d3 = sistem.cautaDepartament(dep, gasit);
                         if (gasit) {
                             std::cout << "\n" << d3 << "\n";
                         }
@@ -266,7 +248,7 @@ int main(){
                 std::cin >> idAng;
                 std::cout << "Procent marire: ";
                 std::cin >> procent;
-                Departament& d4 = verificareDepartament(dep, departamente, gasit);
+                Departament& d4 = sistem.cautaDepartament(dep, gasit);
                 if (gasit) {
                     d4.maresteSalariuId(procent, idAng);
                 }
@@ -281,7 +263,7 @@ int main(){
                 std::cin >> idAng;
                 std::cout << "Procent scadere: ";
                 std::cin >> procent;
-                Departament& d5 = verificareDepartament(dep, departamente, gasit);
+                Departament& d5 = sistem.cautaDepartament(dep, gasit);
                 if (gasit) {
                     d5.scadereSalariuId(procent, idAng);
                 }
@@ -300,7 +282,7 @@ int main(){
                 std::cin >> buget;
                 std::cout << "Alege departament (SD - HR - LG - DG): ";
                 std::cin >> dep;
-                Departament& d6 = verificareDepartament(dep, departamente, gasit);
+                Departament& d6 = sistem.cautaDepartament(dep, gasit);
                 if (gasit) {
                     Proiect p(numeProiect, buget);
                     d6.viabilitateProiect(p);
@@ -319,7 +301,7 @@ int main(){
                         std::cin >> dep;
                         std::cout << "Introdu id-ul angajatului: ";
                         std::cin >> idAng;
-                        Departament& d7 = verificareDepartament(dep, departamente, gasit);
+                        Departament& d7 = sistem.cautaDepartament(dep, gasit);
                         if (gasit) {
                             d7.promoveazaContractor(idAng);
                         }
@@ -331,7 +313,7 @@ int main(){
                         std::cin >> dep;
                         std::cout << "Introdu id-ul angajatului: ";
                         std::cin >> idAng;
-                        Departament& d7 = verificareDepartament(dep, departamente, gasit);
+                        Departament& d7 = sistem.cautaDepartament(dep, gasit);
                         if (gasit) {
                             d7.promoveazaPartTime(idAng);
                         }
