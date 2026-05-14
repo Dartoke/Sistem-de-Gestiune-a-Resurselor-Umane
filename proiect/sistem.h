@@ -16,4 +16,5 @@ public:
     
     std::vector<Departament>& getDepartamente();
     Departament& cautaDepartament(const char* cod, bool& gasit);
+    bool existaID(int id) const;
 };

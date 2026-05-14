@@ -31,3 +31,14 @@ Departament& SistemHR::cautaDepartament(const char* dep, bool& gasit){
 std::vector<Departament>& SistemHR::getDepartamente() {
     return departamente;
 }
+
+bool SistemHR::existaID(int id) const {
+    for (const auto& departament : departamente) {
+        for (auto* a : departament.getEchipa()) {
+            if (a -> getId() == id) {
+                return true;
+            }
+        }
+    }
+    return false;
+} 

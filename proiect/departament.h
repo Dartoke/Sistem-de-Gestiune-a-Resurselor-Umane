@@ -23,6 +23,7 @@ public:
     ~Departament();
 
     std::string getNume() const;
+    const std::vector<Angajat*>& getEchipa() const { return echipa; }
 
     void adaugaAngajat (const Angajat& a);
     void stergeAngajat(int id);

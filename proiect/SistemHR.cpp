@@ -132,6 +132,9 @@ int main(){
                 std::cin.getline(numeAng, 100);
                 std::cout << "Id persoana: ";
                 std::cin >> idAng;
+                if (sistem.existaID(idAng)) {
+                    throw ExceptieIdDuplicat(idAng);
+                }
                 std::cout <<"\nTip angajat\n1 - Full Time\n2 - Part Time\n3 - Contractor\n4 - Internship\n";
                 std::cout << "\nAlege optiune (numarul): ";
                 std::cin >> optiuneAngajat;

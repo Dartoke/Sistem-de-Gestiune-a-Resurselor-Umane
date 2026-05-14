@@ -46,3 +46,9 @@ class ExceptieTipGresit : public ExceptieHR {
         explicit ExceptieTipGresit(const std::string& mesaj) 
         : ExceptieHR(mesaj) {}
 };
+
+class ExceptieIdDuplicat : public ExceptieHR {
+    public:
+        explicit ExceptieIdDuplicat (int id) 
+        : ExceptieHR ("ID duplicat: " + std::to_string(id)) {}
+};

@@ -46,7 +46,7 @@ Departament::~Departament() {
 
 std::string Departament::getNume() const { 
     return numeDepartament; 
-} //getter
+} 
 
 //functie de adaugare angajat in departament
 void Departament::adaugaAngajat (const Angajat& a) {
