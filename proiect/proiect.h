@@ -1,26 +1,52 @@
 #pragma once
 #include <iostream>
+#include <cstring>
 #include "utile.h"
 
+template <typename TipBuget>
+
 class Proiect {
+    private:
+        char* numeProiect;
+        TipBuget bugetAlocat;
 
-private:
+    public:
 
-    char* numeProiect;
-    double bugetAlocat;
+    Proiect (const char* nume, TipBuget buget) 
+    : bugetAlocat(buget) {
+        numeProiect = copiazaSir(nume);
+    }
 
-public: 
+    Proiect (const Proiect& altul)
+    : bugetAlocat(altul.bugetAlocat) {
+        numeProiect = copiazaSir(altul.numeProiect);
+    }
 
-    //constructori/destructori
-    Proiect (const char* nume, double buget);
-    Proiect (const Proiect& altul);
-    Proiect& operator=(const Proiect& altul); 
-    ~Proiect();
+    Proiect& operator=(const Proiect& altul) {
+        if (this != &altul) {
+            delete[] numeProiect;
+            numeProiect = copiazaSir(altul.numeProiect);
+            bugetAlocat = altul.bugetAlocat;
+        }
+        return *this;
+    }
 
-    double getBuget() const;
+    ~Proiect() {
+        delete[] numeProiect;
+    }
+
+    TipBuget getBuget() const { 
+        return bugetAlocat;              //getteri
+    }    
                                         
-    const char* getNume() const;
+    const char* getNume() const { 
+        return numeProiect;  
+    }
 
     //afisare proiect
-    friend std::ostream& operator<<(std::ostream& os, const Proiect& proiect);
+    friend std::ostream& operator<<(std::ostream& os, const Proiect& proiect){
+        os << "Proiect: " << proiect.numeProiect << " | Buget: " << proiect.bugetAlocat;
+        return os;
+    }
+
 };

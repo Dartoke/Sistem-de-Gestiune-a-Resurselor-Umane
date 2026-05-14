@@ -14,6 +14,7 @@
 #include "intern.h"
 #include "angajatFactory.h"
 #include "sistem.h"
+#include "utileTemplate.h"
 
 
 int main(){
@@ -213,7 +214,7 @@ int main(){
             case 3: {
                 //baza de date
                 std::cout << "Total angajati in firma: " << Angajat::getTotalNumarAngajati() << "\n\n";
-                std::cout << "Afisare\n1 - Toata firma\n2 - Un singur departament\n\n";
+                std::cout << "Afisare\n1 - Toata firma\n2 - Un singur departament\n3 - Total angajati\n\n";
                 std::cout << "Alege optiune (numarul): ";
                 std::cin >> optiuneAngajat;
                 switch (optiuneAngajat) {
@@ -232,6 +233,24 @@ int main(){
                         if (gasit) {
                             std::cout << "\n" << d3 << "\n";
                         }
+                        break;
+                    }
+
+                    case 3: {
+                        std::cout << "\nTotal angajati: " << Angajat::getTotalNumarAngajati() << "\n";
+                        
+                        int totalFT, totalPT, totalCT, totalINT;
+                        for (const auto& d : sistem.getDepartamente()) {
+                        totalFT += numaraDeTip<AngajatFullTime>(d.getEchipa());
+                        totalPT += numaraDeTip<AngajatPartTime>(d.getEchipa());
+                        totalCT += numaraDeTip<Contractor>(d.getEchipa());
+                        totalINT += numaraDeTip<Intern>(d.getEchipa());
+                        }   
+                    
+                        std::cout << "Full-Time: " << totalFT << "\n";
+                        std::cout << "Part-Time: " << totalPT << "\n";
+                        std::cout << "Contractor: " << totalCT << "\n";
+                        std::cout << "Internship: " << totalINT << "\n\n";
                         break;
                     }
                     
@@ -281,14 +300,27 @@ int main(){
                 std::cout << "Nume proiect: ";
                 std::cin.ignore();
                 std::cin.getline(numeProiect, 100);
-                std::cout << "Buget proiect: ";
-                std::cin >> buget;
+                std::cout << "Tip buget:\n1 - Numar intreg (fara zecimale)\n2 - Numar real (cu zecimale)\n";
+                std::cout << "Alege optiune: ";
+                int tipBuget;
+                std::cin >> tipBuget;
                 std::cout << "Alege departament (SD - HR - LG - DG): ";
                 std::cin >> dep;
                 Departament& d6 = sistem.cautaDepartament(dep, gasit);
                 if (gasit) {
-                    Proiect p(numeProiect, buget);
-                    d6.viabilitateProiect(p);
+                    if (tipBuget == 1) {
+                        int buget;
+                        std::cout << "Buget proiect: ";
+                        std::cin >> buget;
+                        Proiect<int> p(numeProiect, buget);
+                        d6.viabilitateProiect(p);
+                    } else {
+                        double buget;
+                        std::cout << "Buget proiect: ";
+                        std::cin >> buget;
+                        Proiect<double> p(numeProiect, buget);
+                        d6.viabilitateProiect(p);
+                    }
                 }
                 std::cout << "\n";
                 break;

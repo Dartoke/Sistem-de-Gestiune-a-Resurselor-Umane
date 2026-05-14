@@ -92,17 +92,6 @@ double Departament::costProiectEchipa() const {
     return taxeLogistica(total);
 }
 
-//functie care verifica daca un departament poate face proiectul ( in functie de bugetul alocat )
-void Departament::viabilitateProiect (const Proiect& p) const{
-    double costProiect = costProiectEchipa();
-    if (costProiect > p.getBuget()) {
-        throw ExceptieProiectNeviabil(p.getNume());
-    }
-    else {
-        std::cout << "\nProiectul ~" << p.getNume() << "~ este realizabil. Buget ramas: " << p.getBuget() - costProiect << std::endl;
-    }
-}
-
 // functie de marire a salariului
 void Departament::maresteSalariuId(double procent, int id){
     bool gasit = false;
