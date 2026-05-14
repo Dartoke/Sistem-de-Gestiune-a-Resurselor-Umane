@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 include_directories(${CMAKE_SOURCE_DIR}/proiect)
 
 add_executable(SistemHR
-    proiect/TheProject.cpp
+    proiect/SistemHR.cpp
     proiect/angajati.cpp
     proiect/angajatFullTime.cpp
     proiect/angajatPartTime.cpp
