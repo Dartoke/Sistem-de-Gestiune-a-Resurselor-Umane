@@ -1,6 +1,6 @@
 # Sistem de Gestiune a Resurselor Umane
 
-Un sistem interactiv de management HR implementat în C++, care permite unui HR-ist să gestioneze angajații, departamentele și proiectele unei firme.
+Un sistem interactiv de management HR implementat în C++, care permite unui HR-ist să gestioneze angajații, departamentele și proiectele unei firme. Proiectul demonstrează concepte fundamentale și avansate de programare orientată pe obiecte.
 
 ---
 
@@ -12,9 +12,12 @@ proiect/
 ├── contractor.h / .cpp              # Angajat tip contractor
 ├── intern.h / .cpp                  # Stagiar (a 4-a derivata)
 ├── departament.h / .cpp             # Container de angajati
-├── proiect.h / .cpp                 # Clasa proiect
+├── proiect.h                        # Clasa template Proiect<T>
+├── angajatFactory.h / .cpp          # Design pattern Factory
+├── sistem.h / .cpp                  # Design pattern Singleton
 ├── exceptii.h                       # Ierarhie de exceptii
 ├── utile.h                          # Functii utilitare
+├── utileTemplate.h                  # Functii template libere
 └── SistemHR.cpp                     # Punctul de intrare (main)
 
 ---
@@ -30,14 +33,12 @@ Clasa abstracta `Angajat` sta la baza intregii ierarhii. Nu poate fi instantiata
 - `maresteSalariu()` / `scadeSalariu()` — modifica atributul specific fiecarui tip
 
 ```cpp
-// Baza abstracta
 class Angajat {
     virtual double calculeazaSalariu() const = 0;
     virtual Angajat* clone() const = 0;
     // ...
 };
 
-// Derivate
 class AngajatFullTime : public Angajat { /* salariu fix + bonus vechime */ };
 class AngajatPartTime : public Angajat { /* ore/sapt * tarif orar * 4 */ };
 class Contractor      : public Angajat { /* tarif zilnic * zile lucrate */ };
@@ -45,7 +46,7 @@ class Intern          : public Angajat { /* stipendiu fix lunar */ };
 ```
 
 ### 2. Polimorfism
-`Departament` tine un `vector<Angajat*>` si apeleaza functiile virtual prin pointer de baza — fara sa stie tipul concret al fiecarui angajat:
+`Departament` tine un `vector<Angajat*>` si apeleaza functiile virtual prin pointer de baza:
 
 ```cpp
 double Departament::costProiectEchipa() const {
@@ -60,87 +61,114 @@ double Departament::costProiectEchipa() const {
 Afisarea angajatilor foloseste pattern-ul NVI — `operator<<` public apeleaza `print()` privat virtual:
 
 ```cpp
-// In baza — public, non-virtual
 friend std::ostream& operator<<(std::ostream& os, const Angajat& a) {
-    a.print(os);  // apel polimorfic intern
+    a.print(os);
     return os;
-}
-
-// In fiecare derivata — privat, virtual
-void AngajatFullTime::print(std::ostream& os) const {
-    os << nume << " | Salariu: " << salariu
-       << " | Zile concediu: " << zileConcediu
-       << " | Ani vechime: " << aniVechime;
 }
 ```
 
 ### 4. Copiere corecta (Rule of Three + clone)
-`Departament` implementeaza constructor de copiere, `operator=` si destructor pentru a gestiona corect memoria dinamica. Copierea angajatilor se face prin `clone()` pentru a evita shallow copy:
-
-```cpp
-Departament::Departament(const Departament& altul) {
-    for (auto* a : altul.echipa)
-        echipa.push_back(a->clone());  // deep copy polimorfic
-}
-
-Departament::~Departament() {
-    for (auto* a : echipa)
-        delete a;  // elibereaza fiecare angajat
-}
-```
+`Departament` implementeaza constructor de copiere, `operator=` si destructor pentru a gestiona corect memoria dinamica. Copierea angajatilor se face prin `clone()` pentru a evita shallow copy.
 
 ### 5. Ierarhie de exceptii
-Toate erorile din sistem deriva din `ExceptieHR`, care la randul ei deriva din `std::exception`:
+Toate erorile din sistem deriva din `ExceptieHR`:
 std::exception
+├── ExceptieFisier              // probleme la deschidere fisier
 └── ExceptieHR
 ├── ExceptieSalariuInvalid   // salariu < minim legal
 ├── ExceptieAngajatNegasit   // ID inexistent
+├── ExceptieIdDuplicat       // ID deja folosit
+├── ExceptieTipGresit        // dynamic_cast esuat
 └── ExceptieProiectNeviabil  // buget insuficient
 
-Exemplu de utilizare:
-```cpp
-try {
-    departament.stergeAngajat(id);
-} catch (const ExceptieAngajatNegasit& e) {
-    std::cout << e.what() << "\n";
-} catch (const ExceptieHR& e) {
-    std::cout << "Eroare HR: " << e.what() << "\n";
-}
-```
-
 ### 6. Membrii statici
-Fiecare clasa derivata are un minim legal propriu ca membru `static const`:
-
-```cpp
-const double AngajatFullTime::SALARIU_MINIM = 4300.0;
-const double AngajatPartTime::TARIF_ORAR_MINIM = 25.0;
-const double Contractor::TARIF_ZILNIC_MINIM = 200.0;
-```
-
-`Angajat` tine un contor global de angajati activi, incrementat/decrementat automat in constructori/destructor:
-
-```cpp
-std::cout << "Total angajati: " << Angajat::getTotalNumarAngajati();
-```
+Fiecare clasa derivata are un minim legal propriu ca membru `static const`. `Angajat` tine un contor global de angajati activi, incrementat automat in constructori.
 
 ### 7. dynamic_cast
-Promovarea unui angajat foloseste `dynamic_cast` pentru a verifica tipul la runtime:
+Promovarea unui Contractor sau PartTime la FullTime foloseste `dynamic_cast` pentru a verifica tipul la runtime.
+
+---
+
+## Concepte avansate (Tema 3)
+
+### 8. Clasa template Proiect<T>
+`Proiect` a fost transformat in clasa template — bugetul poate fi orice tip numeric:
 
 ```cpp
-void Departament::promoveazaContractor(int id) {
-    for (auto i = echipa.begin(); i != echipa.end(); i++) {
-        if ((*i)->getId() == id) {
-            Contractor* c = dynamic_cast<Contractor*>(*i);
-            if (c) {
-                double salariuLunar = c->getSalariuZilnic() * c->getZileLucrate();
-                delete *i;
-                *i = new AngajatFullTime(c->getNume(), id, salariuLunar, 20, 0);
-            } else {
-                throw ExceptieAngajatNegasit("Angajatul nu este contractor");
-            }
-        }
-    }
+template <typename TipBuget>
+class Proiect {
+    TipBuget bugetAlocat;
+    // ...
+};
+
+// utilizare
+Proiect<double> p1("Site web", 15000.50);    // buget cu zecimale
+Proiect<int> p2("Restructurare", 50000);      // buget rotund
+```
+
+La verificarea viabilitatii unui proiect, userul poate alege tipul bugetului.
+
+### 9. Functie template membra
+`Departament::viabilitateProiect<T>` accepta proiecte de orice tip:
+
+```cpp
+template <typename TipBuget>
+void viabilitateProiect(const Proiect<TipBuget>& p) const {
+    double costProiect = costProiectEchipa();
+    if (costProiect > p.getBuget())
+        throw ExceptieProiectNeviabil(p.getNume());
+    // ...
 }
+```
+
+### 10. Functie template libera
+`numaraDeTip<TipDorit, TipBaza>` foloseste templates plus `dynamic_cast` pentru a numara angajati de un anumit tip concret:
+
+```cpp
+template <typename TipDorit, typename TipBaza>
+int numaraDeTip(const std::vector<TipBaza*>& vec) {
+    int count = 0;
+    for (const auto* elem : vec)
+        if (dynamic_cast<const TipDorit*>(elem) != nullptr)
+            count++;
+    return count;
+}
+
+// utilizare
+int nrContractori = numaraDeTip<Contractor>(departament.getEchipa());
+```
+
+### 11. Design Pattern: Factory
+`AngajatFactory` centralizeaza construirea diferitelor tipuri de angajati. Astfel, `main` nu mai depinde direct de tipurile concrete:
+
+```cpp
+class AngajatFactory {
+public:
+    static Angajat* creeazaFullTime(const char* nume, int id, double sal, int zile, int ani);
+    static Angajat* creeazaPartTime(const char* nume, int id, int ore, double tarif);
+    static Angajat* creeazaContractor(const char* nume, int id, double tarif, int zile, const std::string& exp);
+    static Angajat* creeazaIntern(const char* nume, int id, double stip, int durata, const std::string& mentor);
+};
+```
+
+### 12. Design Pattern: Singleton
+`SistemHR` exista ca o singura instanta in tot programul. Gestioneaza centralizat cele 4 departamente si ofera functionalitati precum cautare departament si validare ID unic la nivel de firma:
+
+```cpp
+class SistemHR {
+private:
+    std::vector<Departament> departamente;
+    SistemHR();  // constructor privat
+public:
+    SistemHR(const SistemHR&) = delete;
+    SistemHR& operator=(const SistemHR&) = delete;
+    static SistemHR& getInstance();
+    bool existaID(int id) const;
+    // ...
+};
+
+// utilizare
+SistemHR& sistem = SistemHR::getInstance();
 ```
 
 ---
@@ -151,28 +179,37 @@ void Departament::promoveazaContractor(int id) {
 |---------|-----------|
 | `1` | Angajeaza o persoana (Full Time / Part Time / Contractor / Intern) |
 | `2` | Concediaza un angajat dupa ID |
-| `3` | Baza de date — afiseaza toti angajatii sau un departament |
+| `3` | Baza de date — afiseaza firma, departament, sau statistici pe tipuri |
 | `4` | Mareste salariul unui angajat cu un procent |
 | `5` | Scade salariul unui angajat cu un procent |
-| `6` | Verifica viabilitatea financiara a unui proiect |
+| `6` | Verifica viabilitatea financiara a unui proiect (buget int sau double) |
 | `7` | Promoveaza un Contractor sau PartTime la Full Time |
 | `0` | Iesire din program |
 
 ---
 
-## Format fisier de intrare
+## Selectie aleatoare la pornire
 
-La pornirea programului se cere un fisier cu angajati predefiniti. Formatul fiecarei linii:
+La pornire, programul:
+1. Citeste 100 de angajati din fisierul de intrare
+2. Amesteca aleator vectorul cu `std::shuffle`
+3. Selecteaza primii 60 si ii distribuie echitabil in cele 4 departamente (round-robin)
+
+Acest mecanism asigura ca fiecare rulare ofera o configuratie diferita a firmei.
+
+---
+
+## Format fisier de intrare
 Full Time % Nume Angajat % ID % Salariu % ZileConcediu % AniVechime
 Part Time % Nume Angajat % ID % OrePerSaptamana % TarifOrar
 Contractor % Nume Angajat % ID % TarifZilnic % ZileLucrate % DataExpirare
 Intern % Nume Angajat % ID % Stipendiu % DurataLuni % NumeMentor
 
-Exemplu (`angajati.txt`):
-Full Time % Ion Popescu % 1 % 6000 % 21 % 3
-Part Time % Maria Ionescu % 2 % 20 % 35
-Contractor % Andrei Popa % 3 % 400 % 15 % 31-12-2025
-Intern % Ana Dumitrescu % 4 % 1500 % 6 % Ion Popescu
+Exemplu:
+Full Time % Ion Popescu % 101 % 6000 % 21 % 3
+Part Time % Maria Ionescu % 102 % 20 % 35
+Contractor % Andrei Popa % 103 % 400 % 15 % 31-12-2026
+Intern % Ana Dumitrescu % 104 % 1500 % 6 % Ion Popescu
 
 ---
 
@@ -187,12 +224,8 @@ Intern % Ana Dumitrescu % 4 % 1500 % 6 % Ion Popescu
 
 ---
 
-## Compilare si rulare
+## Tag-uri git
 
-```bash
-# Compilare
-g++ -std=c++17 SistemHR.cpp angajati.cpp angajatFullTime.cpp angajatPartTime.cpp contractor.cpp intern.cpp departament.cpp proiect.cpp -I . -o SistemHR.exe
-
-# Rulare
-./SistemHR.exe
-```
+- `v0.1` — Tema 1: compunere, 3 clase, separare h/cpp
+- `v0.2` — Tema 2: mostenire, polimorfism, exceptii, dynamic_cast
+- `v0.3` — Tema 3: templates, design patterns (Factory, Singleton)
